@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "voice-activity-history",
+  "name": "Voice Activity History",
+  "description": "Keeps a local history of users joining, leaving and moving around your voice sessions.",
+  "version": "1.0.0",
+  "category": "Voice",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "voiceActivityHistory",
+  "rootFolder": "voiceActivityHistory"
+}
