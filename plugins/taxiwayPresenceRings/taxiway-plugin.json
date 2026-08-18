@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "taxiway-presence-rings",
+  "name": "Taxiway Presence Rings",
+  "description": "Full circular avatar presence rings across member lists, Friends/DMs, profile popouts and full user profiles.",
+  "version": "1.0.5",
+  "category": "Appearance",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "taxiwayPresenceRings",
+  "rootFolder": "taxiwayPresenceRings"
+}
