@@ -1,7 +1,10 @@
 {
   "manager": {
     "version": "3.7.1",
-    "downloadUrl": "https://github.com/TaxiwayBravo/plugins"
+    "downloadUrl": "",
+    "sha256": "",
+    "releaseNotes": "",
+    "mandatory": false
   },
   "plugins": [
     {
