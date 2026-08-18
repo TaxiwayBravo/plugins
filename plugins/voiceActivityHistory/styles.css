@@ -1,0 +1,109 @@
+.tb-vah-root {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tb-vah-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.tb-vah-muted,
+.tb-vah-action,
+.tb-vah-meta {
+    color: var(--text-muted);
+}
+
+.tb-vah-clear {
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 8px;
+    padding: 7px 11px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--status-danger-text);
+    background: var(--button-secondary-background);
+}
+
+.tb-vah-clear:hover:not(:disabled) {
+    background: var(--button-secondary-background-hover);
+}
+
+.tb-vah-clear:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.tb-vah-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 460px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.tb-vah-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--background-modifier-accent);
+    background: var(--background-secondary);
+}
+
+.tb-vah-type {
+    min-width: 50px;
+    text-align: center;
+    padding: 4px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .45px;
+}
+
+.tb-vah-type-join {
+    color: var(--status-positive-text);
+    background: color-mix(in srgb, var(--status-positive) 18%, transparent);
+}
+
+.tb-vah-type-leave {
+    color: var(--status-danger-text);
+    background: color-mix(in srgb, var(--status-danger) 18%, transparent);
+}
+
+.tb-vah-type-move {
+    color: var(--text-link);
+    background: color-mix(in srgb, var(--brand-500) 16%, transparent);
+}
+
+.tb-vah-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.tb-vah-user,
+.tb-vah-action,
+.tb-vah-meta {
+    display: block;
+}
+
+.tb-vah-action {
+    margin-top: 2px;
+}
+
+.tb-vah-meta {
+    margin-top: 4px;
+}
+
+.tb-vah-empty {
+    padding: 26px 18px;
+    text-align: center;
+    border-radius: 12px;
+    background: var(--background-secondary);
+}
