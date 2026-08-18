@@ -1,26 +1,28 @@
 # TaxiwayBravo Vencord Plugins
 
-Official TaxiwayBravo Vencord plugins, theme and plugin-manager feed.
+Official TaxiwayBravo Vencord plugins, theme and update feed.
 
-## Plugins
+## Current plugins
 
-- Hidden Channel Info+ — v1.2
-- Tidal Controls — v1.2.2
-- Taxiway Presence Rings — v1.0.5
+- **Hidden Channel Info+** — v1.2
+- **Tidal Controls** — v1.2.2
+- **Taxiway Presence Rings** — v1.0.5
 
-## Plugin Manager feed
+## Automatic updates
 
-`repository.json` is consumed by TaxiwayBravo Plugins Manager.
+TaxiwayBravo Plugins Manager v3.7.1+ reads `repository.json` from this repository.
 
-Public feed URL:
+The feed points to GitHub's branch archive and a plugin-specific `packageRootFolder`. That means the manager installs and updates directly from the source stored under `plugins/`; separate release ZIPs are not required.
+
+Feed:
 
 `https://raw.githubusercontent.com/TaxiwayBravo/plugins/main/repository.json`
 
 ## Layout
 
-- `plugins/` — plugin source
-- `packages/` — installable plugin ZIPs
+- `plugins/` — canonical plugin source
 - `themes/` — TaxiwayBravo theme
-- `manager/` — plugin manager source and source ZIP
+- `manager/` — manager/update documentation
+- `repository.json` — machine-readable manager/plugin catalogue
 
-> The repository must be public for unauthenticated desktop update checks to work.
+> This repository must be public for users to use the update feed without GitHub authentication.
