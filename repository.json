@@ -53,6 +53,46 @@
       "destinationFolder": "voiceActivityHistory",
       "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
       "packageRootFolder": "plugins/voiceActivityHistory"
+    },
+    {
+      "id": "voice-control-centre",
+      "name": "Voice Control Centre",
+      "description": "Central voice controls with devices, session information and per-user local volume.",
+      "version": "1.0.0",
+      "category": "Voice",
+      "destinationFolder": "voiceControlCentre",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/voiceControlCentre"
+    },
+    {
+      "id": "message-toolbox",
+      "name": "Message Toolbox",
+      "description": "Adds copy, quote, timestamp, link and metadata tools to Discord message context menus.",
+      "version": "1.0.0",
+      "category": "Messages",
+      "destinationFolder": "messageToolbox",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/messageToolbox"
+    },
+    {
+      "id": "discord-clipboard-history",
+      "name": "Discord Clipboard History",
+      "description": "Keeps a private local history of text copied while using Discord.",
+      "version": "1.0.0",
+      "category": "Utility",
+      "destinationFolder": "discordClipboardHistory",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/discordClipboardHistory"
+    },
+    {
+      "id": "role-inspector",
+      "name": "Role Inspector",
+      "description": "Inspect role metadata, permissions, colour, flags, creation time and cached member count.",
+      "version": "1.0.0",
+      "category": "Utility",
+      "destinationFolder": "roleInspector",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/roleInspector"
     }
   ]
 }
