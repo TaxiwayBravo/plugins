@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "channel-bookmarks",
+  "name": "Channel Bookmarks",
+  "description": "Bookmark channels across different servers and jump back to them from one local list.",
+  "version": "1.0.0",
+  "category": "Utility",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "channelBookmarks",
+  "rootFolder": "channelBookmarks"
+}
