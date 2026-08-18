@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "role-inspector",
+  "name": "Role Inspector",
+  "description": "Inspect role metadata, permissions, colour, flags, creation time and cached member count.",
+  "version": "1.0.0",
+  "category": "Utility",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "roleInspector",
+  "rootFolder": "roleInspector"
+}
