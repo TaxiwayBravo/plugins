@@ -1,0 +1,72 @@
+/*
+ * TaxiwayBravo Presence Rings v1.0.4
+ *
+ * Discord's avatar-status mask is removed by index.ts before these styles
+ * apply, so the actual PFP is once again a complete circle.
+ */
+
+:root {
+    --tb-presence-online: #2ecc71;
+    --tb-presence-idle: #f5b942;
+    --tb-presence-dnd: #f04747;
+    --tb-presence-offline: #747b87;
+    --tb-presence-ring-width: 3px;
+}
+
+.tb-avatar-foreign-object,
+.tb-avatar-foreign-object > div,
+.tb-avatar-foreign-object img,
+.tb-presence-avatar {
+    border-radius: 50% !important;
+    overflow: hidden !important;
+}
+
+.tb-presence-avatar {
+    clip-path: circle(50% at 50% 50%) !important;
+    box-sizing: border-box !important;
+    border-style: solid !important;
+    border-width: var(--tb-presence-ring-width) !important;
+}
+
+.tb-presence-avatar[data-tb-presence-avatar="online"] {
+    border-color: var(--tb-presence-online) !important;
+    box-shadow: inset 0 0 0 1px rgba(46, 204, 113, 0.18), 0 0 7px color-mix(in srgb, var(--tb-presence-online) 35%, transparent) !important;
+}
+
+.tb-presence-avatar[data-tb-presence-avatar="idle"] {
+    border-color: var(--tb-presence-idle) !important;
+    box-shadow: inset 0 0 0 1px rgba(245, 185, 66, 0.16), 0 0 7px color-mix(in srgb, var(--tb-presence-idle) 32%, transparent) !important;
+}
+
+.tb-presence-avatar[data-tb-presence-avatar="dnd"] {
+    border-color: var(--tb-presence-dnd) !important;
+    box-shadow: inset 0 0 0 1px rgba(240, 71, 71, 0.18), 0 0 7px color-mix(in srgb, var(--tb-presence-dnd) 35%, transparent) !important;
+}
+
+.tb-presence-avatar[data-tb-presence-avatar="offline"] {
+    border-color: var(--tb-presence-offline) !important;
+    filter: saturate(0.72);
+}
+
+.tb-native-status-indicator {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+[class*="userPopout_"] .tb-presence-avatar,
+[class*="userProfileOuter_"] .tb-presence-avatar,
+[class*="userProfileInner_"] .tb-presence-avatar,
+[class*="profile_"] .tb-presence-avatar,
+[role="dialog"] .tb-presence-avatar {
+    --tb-presence-ring-width: 4px;
+}
+
+[class*="userPopout_"] .tb-presence-avatar,
+[class*="userProfileOuter_"] .tb-presence-avatar,
+[class*="userProfileInner_"] .tb-presence-avatar,
+[class*="profile_"] .tb-presence-avatar {
+    border-radius: 50% !important;
+    clip-path: circle(50% at 50% 50%) !important;
+}
