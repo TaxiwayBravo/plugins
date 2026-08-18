@@ -1,0 +1,83 @@
+.tb-channel-bookmarks-root {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 430px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.tb-channel-bookmark-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--background-modifier-accent);
+    border-radius: 12px;
+    background: var(--background-secondary);
+}
+
+.tb-channel-bookmark-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.tb-channel-bookmark-name,
+.tb-channel-bookmark-guild {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.tb-channel-bookmark-guild,
+.tb-channel-bookmarks-muted {
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.tb-channel-bookmark-actions {
+    display: flex;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.tb-channel-bookmark-button {
+    appearance: none;
+    border: 0;
+    border-radius: 8px;
+    padding: 7px 11px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--white-500);
+    background: var(--button-secondary-background);
+}
+
+.tb-channel-bookmark-button:hover:not(:disabled) {
+    background: var(--button-secondary-background-hover);
+}
+
+.tb-channel-bookmark-button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.tb-channel-bookmark-open {
+    background: var(--brand-500);
+}
+
+.tb-channel-bookmark-open:hover:not(:disabled) {
+    background: var(--brand-560);
+}
+
+.tb-channel-bookmark-remove {
+    color: var(--status-danger-text);
+}
+
+.tb-channel-bookmarks-empty {
+    padding: 22px;
+    text-align: center;
+    border-radius: 12px;
+    background: var(--background-secondary);
+}
