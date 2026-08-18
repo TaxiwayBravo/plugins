@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "message-toolbox",
+  "name": "Message Toolbox",
+  "description": "Adds copy, quote, timestamp, link and metadata tools to Discord message context menus.",
+  "version": "1.0.0",
+  "category": "Messages",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "messageToolbox",
+  "rootFolder": "messageToolbox"
+}
