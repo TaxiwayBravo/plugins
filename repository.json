@@ -1,0 +1,38 @@
+{
+  "manager": {
+    "version": "3.7.1",
+    "downloadUrl": "https://github.com/TaxiwayBravo/plugins"
+  },
+  "plugins": [
+    {
+      "id": "hidden-channel-info-plus",
+      "name": "Hidden Channel Info+",
+      "description": "Inspect locally available metadata for channels surfaced by ShowHiddenChannels.",
+      "version": "1.2",
+      "category": "Utility",
+      "destinationFolder": "hiddenChannelInfoPlus",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/hiddenChannelInfoPlus"
+    },
+    {
+      "id": "tidal-controls",
+      "name": "Tidal Controls",
+      "description": "Control TIDAL from Discord with track metadata, artwork, timeline and playback controls.",
+      "version": "1.2.2",
+      "category": "Media",
+      "destinationFolder": "tidalControls.desktop",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/tidalControls.desktop"
+    },
+    {
+      "id": "taxiway-presence-rings",
+      "name": "Taxiway Presence Rings",
+      "description": "Full circular avatar presence rings across member lists, Friends/DMs, profile popouts and full user profiles.",
+      "version": "1.0.5",
+      "category": "Appearance",
+      "destinationFolder": "taxiwayPresenceRings",
+      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
+      "packageRootFolder": "plugins/taxiwayPresenceRings"
+    }
+  ]
+}
