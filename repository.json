@@ -55,16 +55,6 @@
       "packageRootFolder": "plugins/voiceActivityHistory"
     },
     {
-      "id": "voice-control-centre",
-      "name": "Voice Control Centre",
-      "description": "Central voice controls with devices, session information and per-user local volume.",
-      "version": "1.0.0",
-      "category": "Voice",
-      "destinationFolder": "voiceControlCentre",
-      "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
-      "packageRootFolder": "plugins/voiceControlCentre"
-    },
-    {
       "id": "message-toolbox",
       "name": "Message Toolbox",
       "description": "Adds copy, quote, timestamp, link and metadata tools to Discord message context menus.",
