@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "tidal-controls",
+  "name": "Tidal Controls",
+  "description": "Control TIDAL from Discord with track metadata, artwork, timeline and playback controls.",
+  "version": "1.2.2",
+  "category": "Media",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "tidalControls.desktop",
+  "rootFolder": "tidalControls.desktop"
+}
