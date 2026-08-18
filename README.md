@@ -7,6 +7,7 @@ Official TaxiwayBravo Vencord plugins, theme and update feed.
 - **Hidden Channel Info+** — v1.2
 - **Tidal Controls** — v1.2.2
 - **Taxiway Presence Rings** — v1.0.5
+- **Channel Bookmarks** — v1.0.0
 
 ## Automatic updates
 
