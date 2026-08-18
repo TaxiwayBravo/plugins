@@ -1,0 +1,56 @@
+.vc-hcip-root {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.vc-hcip-notice {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--background-modifier-accent);
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.vc-hcip-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-hcip-row {
+    display: grid;
+    grid-template-columns: minmax(130px, 0.36fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+}
+
+.vc-hcip-label {
+    color: var(--text-muted);
+}
+
+.vc-hcip-value {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.vc-hcip-mono {
+    font-family: var(--font-code);
+}
+
+.vc-hcip-muted {
+    color: var(--text-muted);
+}
+
+.vc-hcip-overwrite {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--background-secondary);
+}
