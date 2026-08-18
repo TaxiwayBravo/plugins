@@ -1,0 +1,130 @@
+/**
+ * @name TaxiwayBravo
+ * @author TaxiwayBravo
+ * @version 0.3.0
+ * @description TaxiwayBravo dark/amber theme. Designed to pair with TaxiwayPresenceRings.
+ */
+
+:root,
+.theme-dark,
+.visual-refresh.theme-dark {
+    --tb-accent: #f2b300;
+    --tb-accent-hover: #ffd24a;
+
+    --tb-bg-0: #07090b;
+    --tb-bg-1: #0b0e12;
+    --tb-bg-2: #11151a;
+    --tb-bg-3: #181d23;
+    --tb-bg-4: #20262e;
+
+    --tb-text: #f5f5f5;
+    --tb-muted: #979da7;
+
+    --tb-presence-online: #2ecc71;
+    --tb-presence-idle: #f5b942;
+    --tb-presence-dnd: #f04747;
+    --tb-presence-offline: #747b87;
+    --tb-presence-ring-width: 3px;
+
+    --background-primary: var(--tb-bg-0) !important;
+    --background-secondary: var(--tb-bg-1) !important;
+    --background-secondary-alt: #090c0f !important;
+    --background-tertiary: #050709 !important;
+    --background-floating: var(--tb-bg-3) !important;
+    --channeltextarea-background: var(--tb-bg-3) !important;
+    --modal-background: var(--tb-bg-2) !important;
+
+    --background-modifier-hover: rgba(255,255,255,.055) !important;
+    --background-modifier-selected: rgba(242,179,0,.16) !important;
+
+    --text-normal: var(--tb-text) !important;
+    --text-muted: var(--tb-muted) !important;
+    --text-link: var(--tb-accent-hover) !important;
+
+    --background-base-lowest: #050709 !important;
+    --background-base-lower: var(--tb-bg-0) !important;
+    --background-base-low: var(--tb-bg-1) !important;
+    --background-surface-high: var(--tb-bg-2) !important;
+    --background-surface-higher: var(--tb-bg-3) !important;
+    --background-surface-highest: var(--tb-bg-4) !important;
+
+    --bg-base-primary: var(--tb-bg-0) !important;
+    --bg-base-secondary: var(--tb-bg-1) !important;
+    --bg-base-tertiary: #050709 !important;
+
+    --brand-500: var(--tb-accent) !important;
+    --brand-560: #cc9400 !important;
+}
+
+[class*="appMount_"],
+[class*="app_"],
+[class*="bg_"],
+[class*="chat_"],
+[class*="chatContent_"] {
+    background: var(--tb-bg-0) !important;
+}
+
+[class*="sidebar_"],
+[class*="sidebarList_"],
+[class*="privateChannels_"],
+[class*="members_"],
+[class*="membersWrap_"] {
+    background: var(--tb-bg-1) !important;
+}
+
+[class*="modeSelected_"] [class*="link_"],
+[data-list-item-id^="channels___"][aria-selected="true"],
+[data-list-item-id^="private-channels-"][aria-selected="true"] {
+    background: rgba(242,179,0,.16) !important;
+    border-radius: 10px !important;
+}
+
+[class*="modeSelected_"] [class*="name_"],
+[class*="modeSelected_"] [class*="icon_"] {
+    color: var(--tb-accent-hover) !important;
+}
+
+[class*="member_"],
+[class*="channel_"] [class*="interactive_"],
+[class*="scrollableContainer_"],
+[class*="statusBubble_"],
+[class*="role_"],
+[class*="rolePill_"],
+[class*="badge_"],
+[role="menu"],
+[role="listbox"] {
+    border-radius: 12px !important;
+}
+
+[class*="statusBubble_"],
+[class*="role_"],
+[class*="rolePill_"],
+[class*="badge_"] {
+    border-radius: 999px !important;
+}
+
+[class*="scrollableContainer_"] {
+    background: var(--tb-bg-3) !important;
+    border: 1px solid rgba(255,255,255,.06) !important;
+}
+
+[class*="scrollableContainer_"]:focus-within {
+    border-color: rgba(242,179,0,.5) !important;
+}
+
+[class*="mentioned_"] {
+    background: rgba(242,179,0,.12) !important;
+}
+
+[class*="mentioned_"]::before {
+    background: var(--tb-accent) !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #343a43 !important;
+    border-radius: 999px !important;
+}
