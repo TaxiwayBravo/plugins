@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "hidden-channel-info-plus",
+  "name": "Hidden Channel Info+",
+  "description": "Inspect locally available metadata for channels surfaced by ShowHiddenChannels.",
+  "version": "1.2",
+  "category": "Utility",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "hiddenChannelInfoPlus",
+  "rootFolder": "hiddenChannelInfoPlus"
+}
