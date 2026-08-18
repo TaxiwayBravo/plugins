@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "discord-clipboard-history",
+  "name": "Discord Clipboard History",
+  "description": "Keeps a private local history of text copied while using Discord.",
+  "version": "1.0.0",
+  "category": "Utility",
+  "author": "TaxiwayBravo",
+  "authorDiscordId": "325723086374567938",
+  "destinationFolder": "discordClipboardHistory",
+  "rootFolder": "discordClipboardHistory"
+}
