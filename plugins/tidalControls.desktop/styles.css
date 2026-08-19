@@ -113,7 +113,8 @@
     cursor: default;
 }
 
-.vc-tidal-button svg {
+.vc-tidal-button svg,
+.vc-tidal-refresh svg {
     width: 17px;
     height: 17px;
 }
@@ -196,4 +197,23 @@
     font-weight: 800;
     line-height: 1;
     color: #fff;
+}
+
+.vc-tidal-diagnostic {
+    border-color: var(--status-danger, #f23f42);
+}
+
+.vc-tidal-diagnostic .vc-tidal-art-fallback {
+    color: var(--status-danger-text, #ff7b7d);
+}
+
+.vc-tidal-error-text {
+    white-space: normal;
+    line-height: 1.25;
+    max-height: 42px;
+    overflow: hidden;
+}
+
+.vc-tidal-diagnostic .vc-tidal-refresh {
+    align-self: center;
 }
