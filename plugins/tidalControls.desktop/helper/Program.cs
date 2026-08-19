@@ -6,6 +6,8 @@ using Windows.Media.Control;
 internal static class Program
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+    private const int MediaManagerTimeoutMs = 4000;
+    private const int MediaPropertiesTimeoutMs = 3500;
 
     public static async Task Main()
     {
@@ -51,24 +53,84 @@ internal static class Program
             "seek" => await Seek(request.PositionMs ?? 0),
             "shuffle" => await SendTidalShortcut('S'),
             "repeat" => await SendTidalShortcut('R'),
+            "diagnostic" => await GetDiagnostic(),
             _ => new Response(false, Error: $"Unknown command: {request.Command}")
         };
     }
 
-    private static async Task<GlobalSystemMediaTransportControlsSession?> GetTidalSession()
+    private static async Task<T> WithTimeout<T>(Task<T> task, int timeoutMs, string operation)
     {
-        var manager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
-        return manager.GetSessions()
-            .FirstOrDefault(s => s.SourceAppUserModelId.Contains("TIDAL", StringComparison.OrdinalIgnoreCase));
+        var finished = await Task.WhenAny(task, Task.Delay(timeoutMs));
+        if (finished != task)
+            throw new TimeoutException($"{operation} timed out after {timeoutMs / 1000.0:0.#} seconds");
+
+        return await task;
+    }
+
+    private static bool IsTidalRunning()
+    {
+        return Process.GetProcesses().Any(process =>
+        {
+            try
+            {
+                return process.ProcessName.Contains("TIDAL", StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
+        });
+    }
+
+    private static async Task<SessionLookup> FindTidalSession()
+    {
+        var manager = await WithTimeout(
+            GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask(),
+            MediaManagerTimeoutMs,
+            "Windows media session manager"
+        );
+
+        var sessions = manager.GetSessions().ToList();
+        var direct = sessions.FirstOrDefault(session =>
+            session.SourceAppUserModelId.Contains("TIDAL", StringComparison.OrdinalIgnoreCase)
+        );
+
+        if (direct is not null)
+            return new SessionLookup(direct, null, sessions.Select(s => s.SourceAppUserModelId).ToArray());
+
+        if (!IsTidalRunning())
+            return new SessionLookup(null, null, sessions.Select(s => s.SourceAppUserModelId).ToArray());
+
+        // TIDAL has changed its Windows identity in the past. If TIDAL is running and
+        // Windows exposes exactly one media session, that single session is the safest fallback.
+        if (sessions.Count == 1)
+            return new SessionLookup(sessions[0], null, sessions.Select(s => s.SourceAppUserModelId).ToArray());
+
+        var sources = sessions.Count == 0
+            ? "none"
+            : string.Join(", ", sessions.Select(s => s.SourceAppUserModelId));
+
+        return new SessionLookup(
+            null,
+            $"TIDAL is running, but Windows did not expose an identifiable TIDAL media session. Sessions: {sources}",
+            sessions.Select(s => s.SourceAppUserModelId).ToArray()
+        );
     }
 
     private static async Task<Response> GetState()
     {
-        var session = await GetTidalSession();
-        if (session is null)
-            return new Response(true, State: new State(false));
+        var lookup = await FindTidalSession();
+        var session = lookup.Session;
 
-        var media = await session.TryGetMediaPropertiesAsync();
+        if (session is null)
+            return new Response(true, State: new State(false, Error: lookup.Error));
+
+        var media = await WithTimeout(
+            session.TryGetMediaPropertiesAsync().AsTask(),
+            MediaPropertiesTimeoutMs,
+            "TIDAL media properties"
+        );
+
         var playback = session.GetPlaybackInfo();
         var timeline = session.GetTimelineProperties();
         var controls = playback.Controls;
@@ -90,9 +152,6 @@ internal static class Program
         if (durationMs > 0)
             positionMs = Math.Min(positionMs, durationMs);
 
-        var repeatMode = playback.AutoRepeatMode?.ToString() ?? "None";
-        var shuffleActive = playback.IsShuffleActive ?? false;
-
         var state = new State(
             Available: true,
             Source: session.SourceAppUserModelId,
@@ -109,19 +168,41 @@ internal static class Program
             CanSeek: controls.IsPlaybackPositionEnabled,
             CanShuffle: controls.IsShuffleEnabled,
             CanRepeat: controls.IsRepeatEnabled,
-            ShuffleActive: shuffleActive,
-            RepeatMode: repeatMode
+            ShuffleActive: playback.IsShuffleActive ?? false,
+            RepeatMode: playback.AutoRepeatMode?.ToString() ?? "None"
         );
 
         return new Response(true, State: state);
     }
 
+    private static async Task<Response> GetDiagnostic()
+    {
+        try
+        {
+            var lookup = await FindTidalSession();
+            var details = new
+            {
+                tidalProcessRunning = IsTidalRunning(),
+                matchedSession = lookup.Session?.SourceAppUserModelId,
+                sessions = lookup.Sources,
+                error = lookup.Error
+            };
+
+            return new Response(true, Diagnostic: details);
+        }
+        catch (Exception ex)
+        {
+            return new Response(false, Error: ex.Message);
+        }
+    }
+
     private static async Task<Response> RunSessionControl(
         Func<GlobalSystemMediaTransportControlsSession, Task<bool>> action)
     {
-        var session = await GetTidalSession();
+        var lookup = await FindTidalSession();
+        var session = lookup.Session;
         if (session is null)
-            return new Response(false, Error: "TIDAL media session not found");
+            return new Response(false, Error: lookup.Error ?? "TIDAL media session not found");
 
         var task = action(session);
         var finished = await Task.WhenAny(task, Task.Delay(2500));
@@ -134,9 +215,10 @@ internal static class Program
 
     private static async Task<Response> Seek(long positionMs)
     {
-        var session = await GetTidalSession();
+        var lookup = await FindTidalSession();
+        var session = lookup.Session;
         if (session is null)
-            return new Response(false, Error: "TIDAL media session not found");
+            return new Response(false, Error: lookup.Error ?? "TIDAL media session not found");
 
         var ticks = Math.Max(0, positionMs) * TimeSpan.TicksPerMillisecond;
         var task = session.TryChangePlaybackPositionAsync(ticks).AsTask();
@@ -151,12 +233,12 @@ internal static class Program
     private static async Task<Response> SendTidalShortcut(char key)
     {
         var tidal = Process.GetProcesses()
-            .FirstOrDefault(p =>
+            .FirstOrDefault(process =>
             {
                 try
                 {
-                    return p.ProcessName.Equals("TIDAL", StringComparison.OrdinalIgnoreCase)
-                           && p.MainWindowHandle != IntPtr.Zero;
+                    return process.ProcessName.Equals("TIDAL", StringComparison.OrdinalIgnoreCase)
+                           && process.MainWindowHandle != IntPtr.Zero;
                 }
                 catch
                 {
@@ -262,10 +344,17 @@ internal static class Program
 
     private sealed record Request(string Command, long? PositionMs = null);
 
+    private sealed record SessionLookup(
+        GlobalSystemMediaTransportControlsSession? Session,
+        string? Error,
+        string[] Sources
+    );
+
     private sealed record Response(
         bool Ok,
         State? State = null,
-        string? Error = null
+        string? Error = null,
+        object? Diagnostic = null
     );
 
     private sealed record State(
@@ -285,6 +374,7 @@ internal static class Program
         bool CanShuffle = false,
         bool CanRepeat = false,
         bool ShuffleActive = false,
-        string RepeatMode = "None"
+        string RepeatMode = "None",
+        string? Error = null
     );
 }
