@@ -21,7 +21,7 @@
       "id": "tidal-controls",
       "name": "Tidal Controls",
       "description": "Control TIDAL from Discord with track metadata, artwork, timeline and playback controls.",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "category": "Media",
       "destinationFolder": "tidalControls.desktop",
       "packageUrl": "https://github.com/TaxiwayBravo/plugins/archive/refs/heads/main.zip",
