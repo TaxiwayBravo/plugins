@@ -3,7 +3,7 @@ setlocal
 
 echo.
 echo ============================================
-echo  TidalControls Native Helper Builder v1.2
+echo  TidalControls Native Helper Builder v1.2.3
 echo ============================================
 echo.
 
@@ -23,6 +23,10 @@ set "TARGET=%APPDATA%\Vencord\TidalControls"
 
 if not exist "%TARGET%" mkdir "%TARGET%"
 
+echo Closing any old TidalControls helper processes...
+taskkill /IM TidalControlsHelper.exe /F >nul 2>nul
+
+echo.
 echo Building native Windows helper...
 echo Runtime PowerShell usage: NONE
 echo.
@@ -37,11 +41,9 @@ if errorlevel 1 (
 )
 
 echo.
-echo Built:
+echo Updated helper:
 echo %TARGET%\TidalControlsHelper.exe
 echo.
-echo You can now run:
-echo   pnpm build
-echo   pnpm inject
+echo Restart Discord after updating the Vencord plugin.
 echo.
 pause
