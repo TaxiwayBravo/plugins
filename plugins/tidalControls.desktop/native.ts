@@ -1,5 +1,5 @@
 /*
- * TidalControls v1.2 native bridge
+ * TidalControls v1.2.3 native bridge
  * NO POWERSHELL.
  * Communicates with a local C# Windows helper over JSON lines.
  */
@@ -28,6 +28,28 @@ let helper: ChildProcessWithoutNullStreams | null = null;
 let stdoutBuffer = "";
 const pending: Pending[] = [];
 
+function rejectPending(error: Error) {
+    while (pending.length) {
+        const request = pending.shift()!;
+        clearTimeout(request.timer);
+        request.reject(error);
+    }
+}
+
+function resetHelper(error?: Error) {
+    const child = helper;
+    helper = null;
+    stdoutBuffer = "";
+
+    if (error)
+        rejectPending(error);
+
+    try {
+        if (child && !child.killed)
+            child.kill();
+    } catch { }
+}
+
 function ensureHelper() {
     if (helper && !helper.killed)
         return helper;
@@ -35,15 +57,16 @@ function ensureHelper() {
     if (!existsSync(HELPER_PATH))
         throw new Error(`TidalControlsHelper.exe is missing. Run build-helper.cmd first. Expected: ${HELPER_PATH}`);
 
-    helper = spawn(HELPER_PATH, [], {
+    const child = spawn(HELPER_PATH, [], {
         windowsHide: true,
         stdio: ["pipe", "pipe", "pipe"]
     });
 
+    helper = child;
     stdoutBuffer = "";
 
-    helper.stdout.setEncoding("utf8");
-    helper.stdout.on("data", chunk => {
+    child.stdout.setEncoding("utf8");
+    child.stdout.on("data", chunk => {
         stdoutBuffer += chunk;
 
         while (true) {
@@ -72,51 +95,47 @@ function ensureHelper() {
     });
 
     let stderr = "";
-    helper.stderr.setEncoding("utf8");
-    helper.stderr.on("data", chunk => stderr += chunk);
+    child.stderr.setEncoding("utf8");
+    child.stderr.on("data", chunk => stderr += chunk);
 
-    helper.on("exit", code => {
-        const err = new Error(`TidalControls helper exited (${code ?? "unknown"}). ${stderr}`.trim());
+    child.on("exit", code => {
+        if (helper === child)
+            helper = null;
 
-        while (pending.length) {
-            const p = pending.shift()!;
-            clearTimeout(p.timer);
-            p.reject(err);
-        }
-
-        helper = null;
+        rejectPending(
+            new Error(`TidalControls helper exited (${code ?? "unknown"}). ${stderr}`.trim())
+        );
     });
 
-    helper.on("error", err => {
-        while (pending.length) {
-            const p = pending.shift()!;
-            clearTimeout(p.timer);
-            p.reject(err);
-        }
+    child.on("error", error => {
+        if (helper === child)
+            helper = null;
 
-        helper = null;
+        rejectPending(error);
     });
 
-    return helper;
+    return child;
 }
 
-function helperRequest<T>(command: string, extra: Record<string, unknown> = {}, timeoutMs = 5000): Promise<HelperResponse<T>> {
+function helperRequest<T>(command: string, extra: Record<string, unknown> = {}, timeoutMs = 5500): Promise<HelperResponse<T>> {
     return new Promise((resolve, reject) => {
         let child: ChildProcessWithoutNullStreams;
 
         try {
             child = ensureHelper();
-        } catch (e) {
-            reject(e);
+        } catch (error) {
+            reject(error);
             return;
         }
 
         const timer = setTimeout(() => {
-            const idx = pending.findIndex(p => p.timer === timer);
-            if (idx >= 0)
-                pending.splice(idx, 1);
+            const index = pending.findIndex(request => request.timer === timer);
+            if (index >= 0)
+                pending.splice(index, 1);
 
-            reject(new Error(`${command} helper request timed out`));
+            const timeoutError = new Error(`${command} helper request timed out; the helper will be restarted`);
+            resetHelper(timeoutError);
+            reject(timeoutError);
         }, timeoutMs);
 
         pending.push({
@@ -125,7 +144,16 @@ function helperRequest<T>(command: string, extra: Record<string, unknown> = {}, 
             timer
         });
 
-        child.stdin.write(JSON.stringify({ command, ...extra }) + "\n");
+        try {
+            child.stdin.write(JSON.stringify({ command, ...extra }) + "\n");
+        } catch (error) {
+            clearTimeout(timer);
+            const index = pending.findIndex(request => request.timer === timer);
+            if (index >= 0)
+                pending.splice(index, 1);
+            resetHelper();
+            reject(error);
+        }
     });
 }
 
@@ -154,7 +182,7 @@ function getJson<T>(url: string): Promise<T> {
     return new Promise((resolve, reject) => {
         const req = httpsGet(url, {
             headers: {
-                "User-Agent": "Vencord-TidalControls/1.2",
+                "User-Agent": "Vencord-TidalControls/1.2.3",
                 "Accept": "application/json"
             }
         }, response => {
@@ -170,8 +198,8 @@ function getJson<T>(url: string): Promise<T> {
             response.on("end", () => {
                 try {
                     resolve(JSON.parse(body) as T);
-                } catch (e) {
-                    reject(e);
+                } catch (error) {
+                    reject(error);
                 }
             });
         });
@@ -185,7 +213,7 @@ function getBinary(url: string): Promise<{ data: Buffer; contentType: string; }>
     return new Promise((resolve, reject) => {
         const req = httpsGet(url, {
             headers: {
-                "User-Agent": "Vencord-TidalControls/1.2",
+                "User-Agent": "Vencord-TidalControls/1.2.3",
                 "Accept": "image/*,*/*;q=0.8"
             }
         }, response => {
@@ -283,7 +311,7 @@ export interface NativeTidalState {
 }
 
 export async function getState(_: IpcMainInvokeEvent): Promise<NativeTidalState> {
-    const response = await helperRequest<NativeTidalState>("state");
+    const response = await helperRequest<NativeTidalState>("state", {}, 6000);
 
     if (!response.ok)
         throw new Error(response.error || "TIDAL helper state request failed");
@@ -300,7 +328,7 @@ export async function control(
     _: IpcMainInvokeEvent,
     action: "toggle" | "next" | "previous"
 ): Promise<{ ok: boolean; }> {
-    const response = await helperRequest(action, {}, 3500);
+    const response = await helperRequest(action, {}, 4500);
     return { ok: !!response.ok };
 }
 
@@ -308,7 +336,7 @@ export async function seek(
     _: IpcMainInvokeEvent,
     positionMs: number
 ): Promise<{ ok: boolean; }> {
-    const response = await helperRequest("seek", { positionMs: Math.max(0, Math.round(positionMs)) }, 3500);
+    const response = await helperRequest("seek", { positionMs: Math.max(0, Math.round(positionMs)) }, 4500);
     return { ok: !!response.ok };
 }
 
@@ -316,6 +344,6 @@ export async function tidalShortcut(
     _: IpcMainInvokeEvent,
     action: "shuffle" | "repeat"
 ): Promise<{ ok: boolean; }> {
-    const response = await helperRequest(action, {}, 2500);
+    const response = await helperRequest(action, {}, 3500);
     return { ok: !!response.ok };
 }
