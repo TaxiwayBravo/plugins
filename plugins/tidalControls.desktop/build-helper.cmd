@@ -3,7 +3,7 @@ setlocal
 
 echo.
 echo ============================================
-echo  TidalControls Native Helper Builder v1.2.3
+echo  TidalControls Native Helper Builder v1.2.4
 echo ============================================
 echo.
 
